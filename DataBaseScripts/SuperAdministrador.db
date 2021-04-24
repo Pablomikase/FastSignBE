@@ -1,0 +1,15 @@
+/*Creación de la base de datos*/
+CREATE DATABASE superAdmin DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+/*Creación de la tabla de credenciales de superadministrador*/
+CREATE TABLE superAdminCredentials (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+/*Creación de usuario superadministrador por DEFAULT*/
+INSERT INTO `superAdminCredentials` (`username`, `password`) VALUES ('superadmin', 'superadmin');
+INSERT INTO `superAdminCredentials` (`username`, `password`) VALUES ('pablo', 'pablo');
+INSERT INTO `superAdminCredentials` (`username`, `password`) VALUES ('carlos', 'carlos');
+INSERT INTO `superAdminCredentials` (`username`, `password`) VALUES ('faiver', 'faiver');

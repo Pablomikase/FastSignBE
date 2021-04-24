@@ -1,0 +1,11 @@
+/*Administrador*/
+/*Creación de la tabla de credenciales de administradores y sus datos*/
+CREATE TABLE `fastsign`.`admin` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `username` VARCHAR(50) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL ,
+  `dni` VARCHAR(9) NOT NULL ,
+  `firstname` VARCHAR(255) NOT NULL ,
+  `surName` VARCHAR(255) NOT NULL
+  , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
