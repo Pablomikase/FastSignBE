@@ -1,0 +1,10 @@
+/*Administrador*/
+/*Creación de la tabla de credenciales de administradores y sus datos*/
+CREATE TABLE `fastsign`.`company` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `companyName` VARCHAR(255) NOT NULL UNIQUE,
+  `cifNumber` VARCHAR(9) NOT NULL ,
+  `companyState` VARCHAR(255) NOT NULL ,
+  `companyDirection` VARCHAR(255) NOT NULL ,
+  `companyArea` VARCHAR(255) NOT NULL
+  , PRIMARY KEY (`id`)) ENGINE = InnoDB;
