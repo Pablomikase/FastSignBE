@@ -4,7 +4,7 @@ session_start();
 
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+    header("location: superAdminLoginNoHash.php");
     exit;
 }
 ?>
@@ -26,7 +26,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <a href="create-admin.php" class="btn btn-success ml-3">Crear Administrador</a>
         <a href="logout.php" class="btn btn-danger ml-3">Eliminar Administrador</a>
         <a href="create-company.php" class="btn btn-success ml-3">Registrar Empresa</a>
-        <a href="logout.php" class="btn btn-danger ml-3">Eliminar Empresa</a>
+        <a href="delete-company.php" class="btn btn-danger ml-3">Eliminar Empresa</a>
 
         <a href="logout.php" class="btn btn-info ml-3">Cerrar sesión</a>
     </p>
