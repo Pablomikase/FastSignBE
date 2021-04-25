@@ -12,45 +12,67 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$companyName = $companyCif ="";
-$companyName_err = $companyCif_err = "";
+$name = $direction = $cif= $state = $area = "";
+$name_err = $direction_err = $cif_err = $state_err = $area_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    //Validate company name
+    //Validate name
     if(empty(trim($_POST["company_name"]))){
-        $companyName_err = "Porfavor, ingrese un nombre";
+        $name_err = "Porfavor, ingrese el nombre de la empresa a registrar";
     }else{
-        $companyName = trim($_POST["company_name"]);
+        $name = trim($_POST["company_name"]);
     }
 
     //Validate CIF
     if (empty($_POST["company_cif"])) {
-        $companyCif_err = "Porfavor, ingrese un CIF";
+        $cif_err = "Porfavor, ingrese un CIF";
     }else if(strlen(trim($_POST["company_cif"]))!=9){
-        $companyCif_err = "El CIF ingresado tiene que tener 9 caracteres.";
+        $cif_err = "El cif ingresado tiene que tener 9 caracteres.";
     }else{
-        $companyCif = trim($_POST["company_cif"]);
+        $cif = trim($_POST["company_cif"]);
+    }
+
+    //Validate surname
+    if(empty(trim($_POST["company_direction"]))){
+        $direction_err = "Porfavor, ingrese una dirección";
+    }else{
+        $direction = trim($_POST["company_direction"]);
     }
 
 
+    //Validate username
+    if(empty(trim($_POST["company_state"]))){
+        $state_err = "Porfavor, ingrese una dirección";
+    }else{
+        $state = trim($_POST["company_state"]);
+    }
+
+    // Validate new password
+    if(empty(trim($_POST["company_area"]))){
+        $area_err = "Porfavor, ingres el área de trabajo de la empresa.";
+    }else{
+        $area = trim($_POST["company_area"]);
+    }
 
 
     // Check input errors before updating the database
-    if(empty($companyName_err) && empty($companyCif_err)){
-        // Prepare an delete statement
+    if(empty($name_err) && empty($cif_err) && empty($direction_err) && empty($state_err) && empty($area_err)){
+        // Prepare an update statement
 
-        $sql = "DELETE FROM company WHERE companyName = ? AND cifNumber = ?";
+        $sql = "INSERT INTO company (companyName, cifNumber, companyState, companyDirection, companyArea) VALUES (?, ?, ?, ?,?)";
 
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_companyName, $param_cif);
+            mysqli_stmt_bind_param($stmt, "sssss", $param_name, $param_cif, $param_state, $param_direction, $param_area);
 
             // Set parameters
-            $param_companyName = $companyName;
-            $param_cif = $companyCif;
-
+            $param_name = $name;
+            $param_cif = $cif;
+            $param_state = $state;
+            $param_direction = $direction;
+            $param_area = $area;
 
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -70,7 +92,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,23 +105,41 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
 <div class="wrapper">
-    <h2>Eliminar Empresa</h2>
-    <p>Rellene los datos de la empresa que quiere eliminar</p>
+    <h2>Creación de Empresas</h2>
+    <p>Rellene los datos de la empresa a crear.</p>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="form-group">
-            <label>Nombre de la empresa</label>
-            <input type="text" name="company_name" class="form-control <?php echo (!empty($companyName)) ? 'is-invalid' : ''; ?>" value="<?php echo $companyName; ?>">
-            <span class="invalid-feedback"><?php echo $companyName_err; ?></span>
+            <label>Nombre de la Empresa</label>
+            <input type="text" name="company_name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
+            <span class="invalid-feedback"><?php echo $name_err; ?></span>
         </div>
 
         <div class="form-group">
             <label>CIF</label>
-            <input type="text" name="company_cif" class="form-control <?php echo (!empty($companyCif)) ? 'is-invalid' : ''; ?>" value="<?php echo $companyCif; ?>">
-            <span class="invalid-feedback"><?php echo $companyCif_err; ?></span>
+            <input type="text" name="company_cif" class="form-control <?php echo (!empty($cif_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $cif; ?>">
+            <span class="invalid-feedback"><?php echo $cif_err; ?></span>
+        </div>
+
+        <div class="form-group">
+            <label>Dirección de la empresa</label>
+            <input type="text" name="company_direction" class="form-control <?php echo (!empty($direction_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $direction; ?>">
+            <span class="invalid-feedback"><?php echo $direction_err; ?></span>
+        </div>
+
+        <div class="form-group">
+            <label>Provincia</label>
+            <input type="text" name="company_state" class="form-control <?php echo (!empty($state_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $state; ?>">
+            <span class="invalid-feedback"><?php echo $state_err; ?></span>
+        </div>
+
+        <div class="form-group">
+            <label>Area</label>
+            <input type="text" name="company_area" class="form-control <?php echo (!empty($area_err)) ? 'is-invalid' : ''; ?>">
+            <span class="invalid-feedback"><?php echo $area_err; ?></span>
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Submit">
-            <a class="btn btn-link ml-2" href="welcomeSuperAdmin.php">Cancel</a>
+            <a class="btn btn-link ml-2" href="welcomeSuperAdmin.php.php">Cancel</a>
         </div>
     </form>
 </div>
