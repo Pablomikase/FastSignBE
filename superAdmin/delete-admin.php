@@ -12,44 +12,44 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$companyName = $companyCif ="";
-$companyName_err = $companyCif_err = "";
+$adminUsername = $adminDni ="";
+$adminUsername_err = $adminDni_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     //Validate company name
-    if(empty(trim($_POST["company_name"]))){
-        $companyName_err = "Porfavor, ingrese un nombre";
+    if(empty(trim($_POST["admin_username"]))){
+        $adminUsername_err = "Porfavor, ingrese un nombre";
     }else{
-        $companyName = trim($_POST["company_name"]);
+        $adminUsername = trim($_POST["admin_username"]);
     }
 
     //Validate CIF
-    if (empty($_POST["company_cif"])) {
-        $companyCif_err = "Porfavor, ingrese un CIF";
-    }else if(strlen(trim($_POST["company_cif"]))!=9){
-        $companyCif_err = "El CIF ingresado tiene que tener 9 caracteres.";
+    if (empty($_POST["admin_dni"])) {
+        $adminDni_err = "Porfavor, ingrese un CIF";
+    }else if(strlen(trim($_POST["admin_dni"]))!=9){
+        $adminDni_err = "El CIF ingresado tiene que tener 9 caracteres.";
     }else{
-        $companyCif = trim($_POST["company_cif"]);
+        $adminDni = trim($_POST["admin_dni"]);
     }
 
 
 
 
     // Check input errors before updating the database
-    if(empty($companyName_err) && empty($companyCif_err)){
+    if(empty($adminUsername_err) && empty($adminDni_err)){
         // Prepare an delete statement
 
-        $sql = "DELETE FROM company WHERE companyName = ? AND cifNumber = ?";
+        $sql = "DELETE FROM admin WHERE username = ? AND dni = ?";
 
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_companyName, $param_cif);
+            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_dni);
 
             // Set parameters
-            $param_companyName = $companyName;
-            $param_cif = $companyCif;
+            $param_username = $adminUsername;
+            $param_dni = $adminDni;
 
 
             // Attempt to execute the prepared statement
@@ -84,19 +84,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
 <div class="wrapper">
-    <h2>Eliminar Empresa</h2>
-    <p>Rellene los datos de la empresa que quiere eliminar</p>
+    <h2>Eliminar Administrador de Empresa</h2>
+    <p>Rellene los datos del administrador que quiere eliminar</p>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="form-group">
-            <label>Nombre de la empresa</label>
-            <input type="text" name="company_name" class="form-control <?php echo (!empty($companyName)) ? 'is-invalid' : ''; ?>" value="<?php echo $companyName; ?>">
-            <span class="invalid-feedback"><?php echo $companyName_err; ?></span>
+            <label>Username del administrador</label>
+            <input type="text" name="admin_username" class="form-control <?php echo (!empty($adminUsername)) ? 'is-invalid' : ''; ?>" value="<?php echo $adminUsername; ?>">
+            <span class="invalid-feedback"><?php echo $adminUsername_err; ?></span>
         </div>
 
         <div class="form-group">
-            <label>CIF</label>
-            <input type="text" name="company_cif" class="form-control <?php echo (!empty($companyCif)) ? 'is-invalid' : ''; ?>" value="<?php echo $companyCif; ?>">
-            <span class="invalid-feedback"><?php echo $companyCif_err; ?></span>
+            <label>DNI</label>
+            <input type="text" name="admin_dni" class="form-control <?php echo (!empty($adminDni)) ? 'is-invalid' : ''; ?>" value="<?php echo $adminDni; ?>">
+            <span class="invalid-feedback"><?php echo $adminDni_err; ?></span>
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Submit">
